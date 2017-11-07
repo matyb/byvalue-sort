@@ -6,12 +6,10 @@ Equivalent functionality to SQL's ORDER BY, but for java. This isn't very perfor
 ```sql
 -- what you would do if have a db available
 select tis.* from THING_IM_SORTING tis
-join TYPE_OF_REQUEST req on
+left join TYPE_OF_REQUEST req on
     req.CODE = tis.REQUEST_CODE
- or (req.CODE is null and tis.REQUEST_CODE is null)
-join TYPE_OF_PAYMENT pmt on
+left join TYPE_OF_PAYMENT pmt on
     pmt.CODE = tis.PAYMENT_CODE
- or (pmt.CODE is null and tis.PAYMENT_CODE is null)
 order by req.ORDER desc, pmt.ORDER desc
 ```
 
