@@ -12,9 +12,9 @@ public class ByValueSort<T> {
     private final List<Comparator<T>> comparators;
     
     @SafeVarargs
-	public ByValueSort(Comparator<T>... comparators) {
-		this.comparators = Arrays.asList(comparators);
-	}
+    public ByValueSort(Comparator<T>... comparators) {
+        this.comparators = Arrays.asList(comparators);
+    }
 
     public List<T> sort(Collection<T> unsorted) {
         List<T> copy = new ArrayList<T>(unsorted);
