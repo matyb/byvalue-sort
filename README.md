@@ -21,7 +21,7 @@ and what you can do with this library with a lil more ceremony and lousier perfo
 // Java 8 sort by 2 'columns` (values) desc w/ external static definition of value ordering
 public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
         TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
-    
+
 public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = ImmutableList.of(
         TypeOfPaymentEnum.CASH, TypeOfPaymentEnum.CHECK, TypeOfPaymentEnum.BOOST_MOBILE);
 
@@ -29,8 +29,10 @@ Function<ThingImSorting, TypeOfRequestEnum> requestExtractor = ThingImSorting::g
 Function<ThingImSorting, TypeOfPaymentEnum> paymentExtractor = ThingImSorting::getTypeOfPayment;
 
 // in some method
-ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
-                                                       new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
+    new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
+    new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+
 List<ThingImSorting> sorted = sorter.sort(unsorted);
 ```
 
@@ -40,7 +42,7 @@ or - if you're stuck in java 7 or below
 // Java 7 sort by 2 'columns` (values) desc w/ external static definition of value ordering
 public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
         TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
-    
+
 public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = ImmutableList.of(
         TypeOfPaymentEnum.CASH, TypeOfPaymentEnum.CHECK, TypeOfPaymentEnum.BOOST_MOBILE);
 
@@ -57,7 +59,36 @@ Extractor<TypeOfPaymentEnum, ThingImSorting> paymentExtractor = new Extractor<Ty
 };
 
 // in some method
-ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
-                                                       new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
+    new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
+    new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+    
 List<ThingImSorting> sorted = sorter.sort(unsorted);
+```
+
+given:
+```java
+List<ThingImSorting> unsorted = Arrays.asList(
+    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
+    new ThingImSorting(TypeOfRequestEnum.THIRD,  TypeOfPaymentEnum.CASH),
+    new ThingImSorting(TypeOfRequestEnum.FIRST,  TypeOfPaymentEnum.BOOST_MOBILE),
+    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
+    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CHECK)));
+```
+
+when:
+```java
+List<ThingImSorting> sorted = sorter.sort(unsorted);
+sorted.stream().map( ThingImSorting::toJson ).collect(Collectors.toList());
+```
+
+then:
+```json
+[
+    { "typeOfRequest": "THIRD",  "typeOfPayment": "CASH" },
+    { "typeOfRequest": "SECOND", "typeOfPayment": "BOOST_MOBILE" },
+    { "typeOfRequest": "SECOND", "typeOfPayment": "CHECK" },
+    { "typeOfRequest": "SECOND", "typeOfPayment": "CASH" },
+    { "typeOfRequest": "FIRST",  "typeOfPayment": "BOOST_MOBILE" }
+]
 ```

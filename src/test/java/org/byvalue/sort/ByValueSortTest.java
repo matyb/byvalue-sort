@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.byvalue.sort.OrderBy.Extractor;
 import org.junit.Test;
@@ -43,21 +44,21 @@ public class ByValueSortTest {
     @Test
     public void supportsJava8Hofs() throws Exception {
         Function<ThingImSorting, TypeOfRequestEnum> fn = ThingImSorting::getTypeOfRequest;
-        
+
         ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
                 new OrderBy<>(fn, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
-        
+
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
                                                       new ThingImSorting(TypeOfRequestEnum.FIRST));
-        
+
         List<ThingImSorting> expected = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.FIRST),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
                                                       new ThingImSorting(TypeOfRequestEnum.THIRD));
-        
+
         assertEquals(expected, sorter.sort(unsorted));
     }
-    
+
     @Test
     public void sortsUnfoundToEnd() throws Exception {
         Extractor<TypeOfRequestEnum, ThingImSorting> requestExtractor = new Extractor<TypeOfRequestEnum, ThingImSorting>(){
