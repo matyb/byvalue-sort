@@ -82,22 +82,6 @@ List<ThingImSorting> sorted = sorter.sort(unsorted);
 sorted.stream().map( ThingImSorting::toJson ).collect(Collectors.toList());
 ```
 
-given:
-```java
-List<ThingImSorting> unsorted = Arrays.asList(
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
-    new ThingImSorting(TypeOfRequestEnum.THIRD,  TypeOfPaymentEnum.CASH),
-    new ThingImSorting(TypeOfRequestEnum.FIRST,  TypeOfPaymentEnum.BOOST_MOBILE),
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CHECK)));
-```
-
-when:
-```java
-List<ThingImSorting> sorted = sorter.sort(unsorted);
-sorted.stream().map( ThingImSorting::toJson ).collect(Collectors.toList());
-```
-
 then:
 ```json
 [
