@@ -1,6 +1,7 @@
 package org.byvalue.sort;
 
 import java.util.Comparator;
+import java.util.function.Function;
 
 /**
  * Order some pojo/dto/vo/vm/etc. by a value it contains.
@@ -17,6 +18,16 @@ public class OrderBy<F,T> implements Comparator<T> {
     private final Extractor<F,T> extractor;
     private final Comparator<F> comparator;
     
+    public OrderBy(Function<T,F> extractor, Comparator<F> comparator){
+        this(extractor, comparator, ASC);
+    }
+    public OrderBy(final Function<T,F> extractor, Comparator<F> comparator, Order order){
+        this(new Extractor<F,T>(){
+            @Override public F extract(T thing) {
+                return extractor.apply(thing);
+            }
+        }, comparator, order);
+    }
     public OrderBy(Extractor<F,T> extractor, Comparator<F> comparator){
         this(extractor, comparator, ASC);
     }

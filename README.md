@@ -2,19 +2,55 @@
 [![Build Status](https://travis-ci.org/matyb/byvalue-sort.png?branch=master)](https://travis-ci.org/matyb/byvalue-sort)
 
 Equivalent functionality to SQL's ORDER BY, but for java. This isn't very performant, if you want that - use a database.
-```java
-// sort by 2 'columns` (values) desc w/ static definition of value ordering
-public static final List<TypeOfRequestEnum> REQUEST_ORDER = Collections.unmodifiableList(Arrays.asList(
-            TypeOfRequestEnum.FIRST,TypeOfRequestEnum.SECOND,TypeOfRequestEnum.THIRD));
-public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = Collections.unmodifiableList(Arrays.asList(
-            TypeOfPaymentEnum.CASH,TypeOfPaymentEnum.CHECK,TypeOfPaymentEnum.BOOST_MOBILE));
 
-final Extractor<TypeOfRequestEnum, ThingImSorting> requestExtractor = new Extractor<TypeOfRequestEnum, ThingImSorting>(){
+```sql
+-- what you would do if have a db available
+select tis.* from THING_IM_SORTING tis
+join TYPE_OF_REQUEST req on
+    req.CODE = tis.REQUEST_CODE
+ or (req.CODE is null and tis.REQUEST_CODE is null)
+join TYPE_OF_PAYMENT pmt on
+    pmt.CODE = tis.PAYMENT_CODE
+ or (pmt.CODE is null and tis.PAYMENT_CODE is null)
+order by req.ORDER desc, pmt.ORDER desc
+```
+
+and what you can do with this library with a lil more ceremony and lousier performance (though you don't need the context switch or infrastructure)
+
+```java
+// Java 8 sort by 2 'columns` (values) desc w/ external static definition of value ordering
+public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
+        TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
+    
+public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = ImmutableList.of(
+        TypeOfPaymentEnum.CASH, TypeOfPaymentEnum.CHECK, TypeOfPaymentEnum.BOOST_MOBILE);
+
+Function<ThingImSorting, TypeOfRequestEnum> requestExtractor = ThingImSorting::getTypeOfRequest;
+Function<ThingImSorting, TypeOfPaymentEnum> paymentExtractor = ThingImSorting::getTypeOfPayment;
+
+// in some method
+ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
+                                                       new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+List<ThingImSorting> sorted = sorter.sort(unsorted);
+```
+
+or - if you're stuck in java 7 or below
+
+```java
+// Java 7 sort by 2 'columns` (values) desc w/ external static definition of value ordering
+public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
+        TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
+    
+public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = ImmutableList.of(
+        TypeOfPaymentEnum.CASH, TypeOfPaymentEnum.CHECK, TypeOfPaymentEnum.BOOST_MOBILE);
+
+Extractor<TypeOfRequestEnum, ThingImSorting> requestExtractor = new Extractor<TypeOfRequestEnum, ThingImSorting>(){
     @Override public TypeOfRequestEnum extract(ThingImSorting thing){
         return thing.getTypeOfRequest();
     }
 };
-final Extractor<TypeOfPaymentEnum, ThingImSorting> paymentExtractor = new Extractor<TypeOfPaymentEnum, ThingImSorting>(){
+
+Extractor<TypeOfPaymentEnum, ThingImSorting> paymentExtractor = new Extractor<TypeOfPaymentEnum, ThingImSorting>(){
     @Override public TypeOfPaymentEnum extract(ThingImSorting thing){
         return thing.getTypeOfPayment();
     }

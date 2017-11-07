@@ -3,20 +3,21 @@ package org.byvalue.sort;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
-import org.byvalue.sort.ByValueSort;
 import org.byvalue.sort.OrderBy.Extractor;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
+
 public class ByValueSortTest {
 
-    public static final List<TypeOfRequestEnum> REQUEST_ORDER = Collections.unmodifiableList(Arrays.asList(
-            TypeOfRequestEnum.FIRST,TypeOfRequestEnum.SECOND,TypeOfRequestEnum.THIRD));
+    public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
+            TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
     
-    public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = Collections.unmodifiableList(Arrays.asList(
-            TypeOfPaymentEnum.CASH,TypeOfPaymentEnum.CHECK,TypeOfPaymentEnum.BOOST_MOBILE));
+    public static final List<TypeOfPaymentEnum> PAYMENT_ORDER = ImmutableList.of(
+            TypeOfPaymentEnum.CASH, TypeOfPaymentEnum.CHECK, TypeOfPaymentEnum.BOOST_MOBILE);
     
     @Test
     public void sortsByListAsc() throws Exception {
@@ -27,6 +28,24 @@ public class ByValueSortTest {
         };
 
         ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
+        
+        List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
+                                                      new ThingImSorting(TypeOfRequestEnum.SECOND),
+                                                      new ThingImSorting(TypeOfRequestEnum.FIRST));
+        
+        List<ThingImSorting> expected = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.FIRST),
+                                                      new ThingImSorting(TypeOfRequestEnum.SECOND),
+                                                      new ThingImSorting(TypeOfRequestEnum.THIRD));
+        
+        assertEquals(expected, sorter.sort(unsorted));
+    }
+    
+    @Test
+    public void supportsJava8Hofs() throws Exception {
+        Function<ThingImSorting, TypeOfRequestEnum> fn = ThingImSorting::getTypeOfRequest;
+        
+        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
+                new OrderBy<>(fn, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
