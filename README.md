@@ -68,6 +68,10 @@ List<ThingImSorting> sorted = sorter.sort(unsorted);
 
 given:
 ```java
+ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
+    new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
+    new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+
 List<ThingImSorting> unsorted = Arrays.asList(
     new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
     new ThingImSorting(TypeOfRequestEnum.THIRD,  TypeOfPaymentEnum.CASH),
