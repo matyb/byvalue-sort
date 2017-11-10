@@ -6,12 +6,10 @@ Equivalent functionality to SQL's ORDER BY, but for java. This isn't very perfor
 ```sql
 -- what you would do if have a db available
 select tis.* from THING_IM_SORTING tis
-join TYPE_OF_REQUEST req on
+left join TYPE_OF_REQUEST req on
     req.CODE = tis.REQUEST_CODE
- or (req.CODE is null and tis.REQUEST_CODE is null)
-join TYPE_OF_PAYMENT pmt on
+left join TYPE_OF_PAYMENT pmt on
     pmt.CODE = tis.PAYMENT_CODE
- or (pmt.CODE is null and tis.PAYMENT_CODE is null)
 order by req.ORDER desc, pmt.ORDER desc
 ```
 
@@ -68,22 +66,10 @@ List<ThingImSorting> sorted = sorter.sort(unsorted);
 
 given:
 ```java
-List<ThingImSorting> unsorted = Arrays.asList(
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
-    new ThingImSorting(TypeOfRequestEnum.THIRD,  TypeOfPaymentEnum.CASH),
-    new ThingImSorting(TypeOfRequestEnum.FIRST,  TypeOfPaymentEnum.BOOST_MOBILE),
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
-    new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CHECK)));
-```
+ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
+    new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
+    new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
 
-when:
-```java
-List<ThingImSorting> sorted = sorter.sort(unsorted);
-sorted.stream().map( ThingImSorting::toJson ).collect(Collectors.toList());
-```
-
-given:
-```java
 List<ThingImSorting> unsorted = Arrays.asList(
     new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
     new ThingImSorting(TypeOfRequestEnum.THIRD,  TypeOfPaymentEnum.CASH),
