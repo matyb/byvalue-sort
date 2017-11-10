@@ -1,4 +1,4 @@
-package org.byvalue.sort;
+package org.orderby.sort;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,12 +7,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ByValueSort<T> {
+public class OrderBy<T> {
     
     private final List<Comparator<T>> comparators;
     
     @SafeVarargs
-    public ByValueSort(Comparator<T>... comparators) {
+    public OrderBy(Comparator<T>... comparators) {
         this.comparators = Arrays.asList(comparators);
     }
 
@@ -27,8 +27,7 @@ public class ByValueSort<T> {
                 if(comparators.size() <= i){
                     return 0;
                 }
-                Comparator<T> comparator = comparators.get(i); // wth i have to cast this?
-                int comparison = comparator.compare(o1, o2);
+                int comparison = comparators.get(i).compare(o1, o2);
                 if(comparison == 0){
                     comparison = compare(o1, o2, ++i);
                 }

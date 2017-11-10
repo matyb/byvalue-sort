@@ -1,4 +1,4 @@
-package org.byvalue.sort;
+package org.orderby.sort;
 
 import java.util.Comparator;
 import java.util.function.Function;
@@ -9,7 +9,7 @@ import java.util.function.Function;
  * @param <F> the value to sort by
  * @param <T> the thing you want to sort
  */
-public class OrderBy<F,T> implements Comparator<T> {
+public class Ordering<F,T> implements Comparator<T> {
     
     public static final Order ASC = new Order(1);
     public static final Order DESC = new Order(-1);
@@ -18,20 +18,20 @@ public class OrderBy<F,T> implements Comparator<T> {
     private final Extractor<F,T> extractor;
     private final Comparator<F> comparator;
     
-    public OrderBy(Function<T,F> extractor, Comparator<F> comparator){
+    public Ordering(Function<T,F> extractor, Comparator<F> comparator){
         this(extractor, comparator, ASC);
     }
-    public OrderBy(final Function<T,F> extractor, Comparator<F> comparator, Order order){
+    public Ordering(final Function<T,F> extractor, Comparator<F> comparator, Order order){
         this(new Extractor<F,T>(){
             @Override public F extract(T thing) {
                 return extractor.apply(thing);
             }
         }, comparator, order);
     }
-    public OrderBy(Extractor<F,T> extractor, Comparator<F> comparator){
+    public Ordering(Extractor<F,T> extractor, Comparator<F> comparator){
         this(extractor, comparator, ASC);
     }
-    public OrderBy(Extractor<F,T> extractor, Comparator<F> comparator, Order order){
+    public Ordering(Extractor<F,T> extractor, Comparator<F> comparator, Order order){
         this.extractor = extractor;
         this.comparator = comparator;
         this.order = order;

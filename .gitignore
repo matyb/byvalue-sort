@@ -25,6 +25,8 @@ hs_err_pid*
 .classpath
 .project
 .settings
+*.swp
 
 # Build
 target
+/bin/

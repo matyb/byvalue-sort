@@ -1,18 +1,17 @@
-package org.byvalue.sort;
+package org.orderby.sort;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import org.byvalue.sort.OrderBy.Extractor;
 import org.junit.Test;
+import org.orderby.sort.Ordering.Extractor;
 
 import com.google.common.collect.ImmutableList;
 
-public class ByValueSortTest {
+public class OrderByTest {
 
     public static final List<TypeOfRequestEnum> REQUEST_ORDER = ImmutableList.of(
             TypeOfRequestEnum.FIRST, TypeOfRequestEnum.SECOND, TypeOfRequestEnum.THIRD);
@@ -28,7 +27,7 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.ASC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
@@ -45,8 +44,8 @@ public class ByValueSortTest {
     public void supportsJava8Hofs() throws Exception {
         Function<ThingImSorting, TypeOfRequestEnum> fn = ThingImSorting::getTypeOfRequest;
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(
-                new OrderBy<>(fn, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(
+                new Ordering<>(fn, new ListIndexComparator<>(REQUEST_ORDER), Ordering.ASC));
 
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
@@ -67,7 +66,7 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.ASC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD),
                                                       new ThingImSorting(null),
@@ -88,7 +87,7 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.DESC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.FIRST),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND),
@@ -114,8 +113,8 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC),
-                                                               new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.ASC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.ASC),
+                                                               new Ordering<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), Ordering.ASC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD, TypeOfPaymentEnum.CASH),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
@@ -145,8 +144,8 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.ASC),
-                                                               new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.ASC),
+                                                               new Ordering<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), Ordering.DESC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD, TypeOfPaymentEnum.CASH),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
@@ -176,8 +175,8 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
-                                                               new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.ASC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.DESC),
+                                                               new Ordering<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), Ordering.ASC));
         
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.THIRD, TypeOfPaymentEnum.CASH),
                                                       new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.BOOST_MOBILE),
@@ -207,8 +206,8 @@ public class ByValueSortTest {
             }
         };
 
-        ByValueSort<ThingImSorting> sorter = new ByValueSort<>(new OrderBy<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), OrderBy.DESC),
-                                                               new OrderBy<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), OrderBy.DESC));
+        OrderBy<ThingImSorting> sorter = new OrderBy<>(new Ordering<>(requestExtractor, new ListIndexComparator<>(REQUEST_ORDER), Ordering.DESC),
+                                                               new Ordering<>(paymentExtractor, new ListIndexComparator<>(PAYMENT_ORDER), Ordering.DESC));
 
         List<ThingImSorting> unsorted = Arrays.asList(new ThingImSorting(TypeOfRequestEnum.SECOND, TypeOfPaymentEnum.CASH),
                                                       new ThingImSorting(TypeOfRequestEnum.THIRD, TypeOfPaymentEnum.CASH),
@@ -274,8 +273,8 @@ public class ByValueSortTest {
             return true;
         }
 
-        private ByValueSortTest getOuterType() {
-            return ByValueSortTest.this;
+        private OrderByTest getOuterType() {
+            return OrderByTest.this;
         }
 
         @Override

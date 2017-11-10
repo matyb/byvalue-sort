@@ -1,4 +1,4 @@
-package org.byvalue.sort;
+package org.orderby.sort;
 
 import java.util.Collections;
 import java.util.Comparator;
