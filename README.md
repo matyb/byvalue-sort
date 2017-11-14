@@ -103,6 +103,6 @@ Vaguely equivalent functionality for group by. Given a collection and key functi
 @Test
 public void testConvertingListWithTwoKeysToAMap() throws Exception {
     assertEquals(ImmutableMap.of("odd", ImmutableList.of(1, 3), "even", ImmutableList.of(2, 4)),
-                 CollectionMap.toMap(ImmutableList.of(1, 2, 3, 4), (v) -> v % 2 == 0 ? "even" : "odd"));
+                 GroupBy.toMap(ImmutableList.of(1, 2, 3, 4), (v) -> v % 2 == 0 ? "even" : "odd"));
 }
 ```
