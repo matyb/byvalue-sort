@@ -3,7 +3,7 @@
 
 Equivalent functionality to SQL's ORDER BY, and GROUP BY, but for java. This isn't very performant, if you want that - use a database.
 
-Here's the equivalent of SQL's order by, but in a jvm exclusively:
+Here's the equivalent of SQL's order by, but in a jvm exclusively. First - what order by would be like in sql if you were just querying:
 
 ```sql
 -- what you would do if have a db available
