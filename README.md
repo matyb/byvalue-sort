@@ -1,7 +1,9 @@
-# By Value Sort
-[![Build Status](https://travis-ci.org/matyb/byvalue-sort.png?branch=master)](https://travis-ci.org/matyb/byvalue-sort)
+# sql4j
+[![Build Status](https://travis-ci.org/matyb/sql4j.png?branch=master)](https://travis-ci.org/matyb/sql4j)
 
-Equivalent functionality to SQL's ORDER BY, but for java. This isn't very performant, if you want that - use a database.
+Equivalent functionality to SQL's ORDER BY, and GROUP BY, but for java. This isn't very performant, if you want that - use a database.
+
+Here's the equivalent of SQL's order by, but in a jvm exclusively:
 
 ```sql
 -- what you would do if have a db available
