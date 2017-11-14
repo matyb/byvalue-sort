@@ -97,7 +97,7 @@ then:
 ]
 ```
 
-Equivalent for group by. Given a collection and key function produces a map of lists containing values grouped by the output of the key function.
+Vaguely equivalent functionality for group by. Given a collection and key function produces a map of lists containing values grouped by the output of the key function. These can obviously in turn be folded/reduced into aggregates, though you're currently on your own for that.
 
 ```java
 @Test
