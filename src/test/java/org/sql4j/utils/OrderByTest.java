@@ -1,4 +1,4 @@
-package org.orderby.sort;
+package org.sql4j.utils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.orderby.sort.Ordering.Extractor;
+import org.sql4j.utils.Ordering.Extractor;
 
 import com.google.common.collect.ImmutableList;
 

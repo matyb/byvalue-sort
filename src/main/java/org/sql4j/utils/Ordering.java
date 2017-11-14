@@ -1,4 +1,4 @@
-package org.orderby.sort;
+package org.sql4j.utils;
 
 import java.util.Comparator;
 import java.util.function.Function;

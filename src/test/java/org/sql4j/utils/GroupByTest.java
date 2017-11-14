@@ -1,9 +1,9 @@
-package org.orderby.group;
+package org.sql4j.utils;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.orderby.group.GroupBy;
+import org.sql4j.utils.GroupBy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
